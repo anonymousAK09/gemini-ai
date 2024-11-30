@@ -1,7 +1,7 @@
 import os
 import time
 from tqdm import tqdm
-from google.ai.language import LanguageServiceClient
+from google.cloud import language_v1
 
 def display_loading_animation():
     for _ in tqdm(range(10), desc="Setting up...", ascii=False):
@@ -13,14 +13,11 @@ def main():
 
     display_loading_animation()
 
-    # Get API key from user
-    api_key = input("Enter your API key: ")
-
-    # Set API key as environment variable
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "path/to/your/api_key.json"
+    # Set up Google Cloud credentials
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "path/to/your/service_account_key.json"
 
     # Create a LanguageServiceClient instance
-    client = LanguageServiceClient()
+    client = language_v1.LanguageServiceClient()
 
     print("Setup complete!")
 
@@ -30,14 +27,10 @@ def main():
             break
 
         # Generate text using the model
-        response = client.generate_text(
-            request={
-                "prompt": prompt,
-                "model": "text-davinci-003",  # Replace with the appropriate model
-            }
-        )
+        response = client.analyze_sentiment(request={"document": {"content": prompt}})
 
-        print(response.text)
+        print(f"Sentiment Score: {response.document_sentiment.score}")
+        print(f"Sentiment Magnitude: {response.document_sentiment.magnitude}")
 
 if __name__ == "__main__":
     main()
