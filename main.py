@@ -13,8 +13,8 @@ def main():
 
     display_loading_animation()
 
-    # Set up Google Cloud credentials
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "path/to/your/service_account_key.json"
+    # Set up Google Cloud credentials (replace with your service account key path)
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/path/to/your/service_account_key.json"
 
     # Create a LanguageServiceClient instance
     client = language_v1.LanguageServiceClient()
